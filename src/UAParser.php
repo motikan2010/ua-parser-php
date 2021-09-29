@@ -331,31 +331,37 @@ class UAParser
             'cpu' => [
                 [
 
-                '/(?:(amd|x(?:(?:86|64)[_-])?|wow|win)64)[;\)]/i'                     // AMD64
+                '/(?:(amd|x(?:(?:86|64)[-_])?|wow|win)64)[;\)]/i'                       // AMD64 (x64)
             ], [[self::ARCHITECTURE, 'amd64']], [
 
-                '/(ia32(?=;))/i'                                                      // IA32 (quicktime)
+                '/(ia32(?=;))/i'                                                        // IA32 (quicktime)
             ], [[self::ARCHITECTURE, function ($str) {
                 return $this->util->lowerize($str);
             }]], [
 
-                '/((?:i[346]|x)86)[;\)]/i'                                            // IA32
+                '/((?:i[346]|x)86)[;\)]/i'                                              // IA32 (x86)
             ], [[self::ARCHITECTURE, 'ia32']], [
+
+                '/\b(aarch64|arm(v?8e?l?|_?64))\b/i'                                    // ARM64
+            ], [[self::ARCHITECTURE, 'arm64']], [
+
+                '/\b(arm(?:v[67])?ht?n?[fl]p?)\b/i'                                     // ARMHF
+            ], [[self::ARCHITECTURE, 'arm64']], [
 
                 // PocketPC mistakenly identified as PowerPC
                 '/windows\s(ce|mobile);\sppc;/i'
             ], [[self::ARCHITECTURE, 'arm']], [
 
-                '/((?:ppc|powerpc)(?:64)?)(?:\smac|;|\))/i'                           // PowerPC
+                '/((?:ppc|powerpc)(?:64)?)(?: mac|;|\))/i'                              // PowerPC
             ], [[self::ARCHITECTURE, '/ower/', '', function ($str) {
                 return $this->util->lowerize($str);
             }]], [
 
-                '/(sun4\w)[;\)]/i'                                                    // SPARC
+                '/(sun4\w)[;\)]/i'                                                      // SPARC
             ], [[self::ARCHITECTURE, 'sparc']], [
 
-                '/((?:avr32|ia64(?=;))|68k(?=\))|arm(?:64|(?=v\d+;))|(?=atmel\s)avr|(?:irix|mips|sparc)(?:64)?(?=;)|pa-risc)/i'
-                // IA64, 68K, ARM/64, AVR/32, IRIX/64, MIPS/64, SPARC/64, PA-RISC
+                '/((?:avr32|ia64(?=;))|68k(?=\))|\barm(?=v(?:[1-7]|[5-7]1)l?|;|eabi)|(?=atmel )avr|(?:irix|mips|sparc)(?:64)?\b|pa-risc)/i'
+                                                                                        // IA64, 68K, ARM/64, AVR/32, IRIX/64, MIPS/64, SPARC/64, PA-RISC
             ], [[self::ARCHITECTURE, function ($str) {
                 return $this->util->lowerize($str);
             }]]
