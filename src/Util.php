@@ -2,10 +2,6 @@
 
 namespace Extead\UAParser;
 
-/**
- * Class Util
- * @package Extead\UAParser
- */
 class Util
 {
     /**

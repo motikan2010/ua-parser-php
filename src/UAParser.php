@@ -2,10 +2,6 @@
 
 namespace Extead\UAParser;
 
-/**
- * Class UAParser
- * @package Extead\UAParser
- */
 class UAParser
 {
     const LIBVERSION = '0.7.14';

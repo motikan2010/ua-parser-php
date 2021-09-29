@@ -1,9 +1,6 @@
 <?php
 
-/**
- * @author Maxim P. (extead@gmail.com)
- */
-class UAParserTest extends PHPUnit_Framework_TestCase
+class UAParserTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

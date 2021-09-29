@@ -2,10 +2,6 @@
 
 namespace Extead\UAParser;
 
-/**
- * Class Mapper
- * @package Extead\UAParser
- */
 class Mapper
 {
     /**

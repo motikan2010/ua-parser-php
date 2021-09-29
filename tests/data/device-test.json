@@ -547,7 +547,8 @@
         "expect"  :
         {
             "vendor"  : "Google",
-            "model"   : "Chromecast"
+            "model"   : "Chromecast",
+            "type"    : null
         }
     }
 ,
@@ -591,7 +592,8 @@
         "expect"  :
         {
             "vendor"  : "Generic",
-            "model"   : "Android 6.0.1"
+            "model"   : "Android 6.0.1",
+            "type"   : null
         }
     }
 ,
