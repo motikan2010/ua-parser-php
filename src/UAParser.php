@@ -578,17 +578,21 @@ class UAParser
 
             'engine' => [[
 
-                '/windows.+\sedge\/([\w\.]+)/i'                                       // EdgeHTML
-            ], [self::VERSION, [self::NAME, 'EdgeHTML']], [
+                '/windows.+\sedge\/([\w\.]+)/i'                                 // EdgeHTML
+                ], [self::VERSION, [self::NAME, 'EdgeHTML']], [
 
-                '/(presto)\/([\w\.]+)/i',                                             // Presto
-                '/(webkit|trident|netfront|netsurf|amaya|lynx|w3m)\/([\w\.]+)/i',     // WebKit/Trident/NetFront/NetSurf/Amaya/Lynx/w3m
-                '/(khtml|tasman|links)[\/\s]\(?([\w\.]+)/i',                          // KHTML/Tasman/Links
-                '/(icab)[\/\s]([23]\.[\d\.]+)/i'                                      // iCab
-            ], [self::NAME, self::VERSION], [
+                '/webkit\/537\.36.+chrome\/(?!27)([\w\.]+)/i'                   // Blink
+                ], [self::VERSION, [self::NAME, 'Blink']], [
 
-                '/rv\:([\w\.]+).*(gecko)/i'                                           // Gecko
-            ], [self::VERSION, self::NAME]
+                '/(presto)\/([\w\.]+)/i',                                       // Presto
+                '/(webkit|trident|netfront|netsurf|amaya|lynx|w3m|goanna)\/([\w\.]+)/i', // WebKit/Trident/NetFront/NetSurf/Amaya/Lynx/w3m/Goanna
+                '/ekioh(flow)\/([\w\.]+)/i',                                    // Flow
+                '/(khtml|tasman|links)[\/\s]\(?([\w\.]+)/i',                    // KHTML/Tasman/Links
+                '/(icab)[\/\s]([23]\.[\d\.]+)/i'                                // iCab
+                ], [self::NAME, self::VERSION], [
+
+                '/rv\:([\w\.]{1,9})\b.+(gecko)/i'                               // Gecko
+                ], [self::VERSION, self::NAME]
             ],
 
             'os' => [[
