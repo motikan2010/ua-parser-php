@@ -25,25 +25,6 @@ class UAParser
     const WEARABLE = 'wearable';
     const EMBEDDED = 'embedded';
 
-    const AMAZON  = 'Amazon';
-    const APPLE   = 'Apple';
-    const ASUS    = 'ASUS';
-    const BLACKBERRY = 'BlackBerry';
-    const BROWSER = 'Browser';
-    const CHROME  = 'Chrome';
-    const EDGE    = 'Edge';
-    const FIREFOX = 'Firefox';
-    const GOOGLE  = 'Google';
-    const HUAWEI  = 'Huawei';
-    const LG      = 'LG';
-    const MICROSOFT = 'Microsoft';
-    const MOTOROLA  = 'Motorola';
-    const OPERA   = 'Opera';
-    const SAMSUNG = 'Samsung';
-    const SONY    = 'Sony';
-    const XIAOMI  = 'Xiaomi';
-    const ZEBRA   = 'Zebra';
-
     /**
      * @var null
      */
@@ -268,63 +249,65 @@ class UAParser
             'cpu' => [[
 
                 '/(?:(amd|x(?:(?:86|64)[-_])?|wow|win)64)[;\)]/i'                       // AMD64 (x64)
-            ], [[self::ARCHITECTURE, 'amd64']], [
+                ], [[self::ARCHITECTURE, 'amd64']], [
 
                 '/(ia32(?=;))/i'                                                        // IA32 (quicktime)
-            ], [[self::ARCHITECTURE, function ($str) {return $this->util->lowerize($str);}]], [
+                ], [[self::ARCHITECTURE, function ($str) {return $this->util->lowerize($str);}]], [
 
                 '/((?:i[346]|x)86)[;\)]/i'                                              // IA32 (x86)
-            ], [[self::ARCHITECTURE, 'ia32']], [
+                ], [[self::ARCHITECTURE, 'ia32']], [
 
                 '/\b(aarch64|arm(v?8e?l?|_?64))\b/i'                                    // ARM64
-            ], [[self::ARCHITECTURE, 'arm64']], [
+                ], [[self::ARCHITECTURE, 'arm64']], [
 
                 '/\b(arm(?:v[67])?ht?n?[fl]p?)\b/i'                                     // ARMHF
-            ], [[self::ARCHITECTURE, 'arm64']], [
+                ], [[self::ARCHITECTURE, 'arm64']], [
 
                 // PocketPC mistakenly identified as PowerPC
                 '/windows\s(ce|mobile);\sppc;/i'
-            ], [[self::ARCHITECTURE, 'arm']], [
+                ], [[self::ARCHITECTURE, 'arm']], [
 
                 '/((?:ppc|powerpc)(?:64)?)(?: mac|;|\))/i'                              // PowerPC
-            ], [[self::ARCHITECTURE, '/ower/', '', function ($str) {
-                return $this->util->lowerize($str);
-            }]], [
+                ], [[self::ARCHITECTURE, '/ower/', '', function ($str) {return $this->util->lowerize($str);}]], [
 
                 '/(sun4\w)[;\)]/i'                                                      // SPARC
-            ], [[self::ARCHITECTURE, 'sparc']], [
+                ], [[self::ARCHITECTURE, 'sparc']], [
 
                 '/((?:avr32|ia64(?=;))|68k(?=\))|\barm(?=v(?:[1-7]|[5-7]1)l?|;|eabi)|(?=atmel )avr|(?:irix|mips|sparc)(?:64)?\b|pa-risc)/i'
                                                                                         // IA64, 68K, ARM/64, AVR/32, IRIX/64, MIPS/64, SPARC/64, PA-RISC
-            ], [[self::ARCHITECTURE, function ($str) {return $this->util->lowerize($str);}]]
+                ], [[self::ARCHITECTURE, function ($str) {return $this->util->lowerize($str);}]]
             ],
 
-            'device' => [
-                [
+            'device' => [[
+
+                //////////////////////////
+                // MOBILES & TABLETS
+                // Ordered by popularity
+                /////////////////////////
 
                 // Samsung
-                '/\b(sch-i[89]0\d|shw-m380s|sm-[pt]\w{2,4}|gt-[pn]\d{2,4}|sgh-t8[56]9|nexus 10)/i'
-            ], [self::MODEL, [self::VENDOR, self::SAMSUNG], [self::TYPE, self::TABLET]], [
+                '/\b(sch-i[89]0\d|shw-m380s|sm-[pt]\w{2,4}|gt-[pn]\d{2,4}|sgh-t8[56]9|nexus\s10)/i'
+                ], [self::MODEL, [self::VENDOR, 'Samsung'], [self::TYPE, self::TABLET]], [
                 '/\b((?:s[cgp]h|gt|sm)-\w+|galaxy nexus)/i',
                 '/samsung[- ]([-\w]+)/i',
                 '/sec-(sgh\w+)/i'
-            ], [self::MODEL, [self::VENDOR, self::SAMSUNG], [self::TYPE, self::MOBILE]], [
+                ], [self::MODEL, [self::VENDOR, 'Samsung'], [self::TYPE, self::MOBILE]], [
 
                 // Apple
                 '/\((ip(?:hone|od)[\w ]*);/i'                                       // iPod/iPhone
-            ], [self::MODEL, [self::VENDOR, self::APPLE], [self::TYPE, self::MOBILE]], [
+                ], [self::MODEL, [self::VENDOR, 'Apple'], [self::TYPE, self::MOBILE]], [
                 '/\((ipad);[-\w\),; ]+apple/i',                                     // iPad
                 '/applecoremedia\/[\w\.]+ \((ipad)/i',
                 '/\b(ipad)\d\d?,\d\d?[;\]].+ios/i',
-            ], [self::MODEL, [self::VENDOR, self::APPLE], [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, [self::VENDOR, 'Apple'], [self::TYPE, self::TABLET]], [
 
                 // Huawei
                 '/\b((?:agr|ags[23]|bah2?|sht?)-a?[lw]\d{2})/i'
-            ], [self::MODEL, [self::VENDOR, self::HUAWEI], [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, [self::VENDOR, 'Huawei'], [self::TYPE, self::TABLET]], [
                 '/d\/huawei([\w\s-]+)[;\)]/i',
                 '/\b(nexus\s6p|vog-[at]?l\d\d|ane-[at]?l[x\d]\d|eml-a?l\d\da?|lya-[at]?l\d[\dc]|clt-a?l\d\di?|ele-l\d\d)/i',
                 '/\b(\w{2,4}-[atu][ln][01259][019])[;\)\s]/i'
-            ], [self::MODEL, [self::VENDOR, self::HUAWEI], [self::TYPE, self::MOBILE]], [
+                ], [self::MODEL, [self::VENDOR, 'Huawei'], [self::TYPE, self::MOBILE]], [
 
                 // Xiaomi
                 '/\b(poco[\w ]+)(?: bui|\))/i',                             // Xiaomi POCO
@@ -332,125 +315,125 @@ class UAParser
                 '/\b(hm[-_ ]?note?[_ ]?(?:\d\w)?) bui/i',                   // Xiaomi Hongmi
                 '/\b(redmi[\-_ ]?(?:note|k)?[\w_ ]+)(?: bui|\))/i',         // Xiaomi Redmi
                 '/\b(mi[\s\-_]?(?:a\d|one|one[\s_]plus|note lte)?[\s_]?(?:\d?\w?)[\s_]?(?:plus)?)\sbuild/i' // Xiaomi Mi
-            ], [[self::MODEL, '/_/', ' '], [self::VENDOR, self::XIAOMI], [self::TYPE, self::MOBILE]], [
+                ], [[self::MODEL, '/_/', ' '], [self::VENDOR, 'Xiaomi'], [self::TYPE, self::MOBILE]], [
                 '/\b(mi[-_ ]?(?:pad)(?:[\w_ ]+))(?: bui|\))/i'              // Mi Pad tablets
-            ], [[self::MODEL, '/_/', ' '], [self::VENDOR, self::XIAOMI], [self::TYPE, self::TABLET]], [
+                ], [[self::MODEL, '/_/', ' '], [self::VENDOR, 'Xiaomi'], [self::TYPE, self::TABLET]], [
 
                 // OPPO
                 '/;\s(\w+)\sbuild.+\soppo/i',
                 '/\s(cph[12]\d{3}|p(?:af|c[al]|d\w|e[ar])[mt]\d0|x9007)\b/i'
-            ], [self::MODEL, [self::VENDOR, 'OPPO'], [self::TYPE, self::MOBILE]], [
+                ], [self::MODEL, [self::VENDOR, 'OPPO'], [self::TYPE, self::MOBILE]], [
 
                 // Vivo
                 '/\svivo\s(\w+)(?:\sbuild|\))/i',
                 '/\s(v[12]\d{3}\w?[at])(?:\sbuild|;)/i'
-            ], [self::MODEL, [self::VENDOR, 'Vivo'], [self::TYPE, self::MOBILE]], [
+                ], [self::MODEL, [self::VENDOR, 'Vivo'], [self::TYPE, self::MOBILE]], [
 
                 // Realme
                 '/\s(rmx[12]\d{3})(?:\sbuild|;)/i'
-            ], [self::MODEL, [self::VENDOR, 'Realme'], [self::TYPE, self::MOBILE]], [
+                ], [self::MODEL, [self::VENDOR, 'Realme'], [self::TYPE, self::MOBILE]], [
 
                 // Motorol
                 '/\s(milestone|droid(?:[2-4x]|\s(?:bionic|x2|pro|razr))?:?(\s4g)?)\b[\w\s]+build\//i',
                 '/\smot(?:orola)?[\s-](\w*)/i',
                 '/((?:moto[\s\w\(\)]+|xt\d{3,4}|nexus\s6)(?=\sbuild|\)))/i'
-            ], [self::MODEL, [self::VENDOR, 'Motorola'], [self::TYPE, self::MOBILE]], [
+                ], [self::MODEL, [self::VENDOR, 'Motorola'], [self::TYPE, self::MOBILE]], [
                 '/\s(mz60\d|xoom[\s2]{0,2})\sbuild\//i'
-            ], [self::MODEL, [self::VENDOR, 'Motorola'], [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, [self::VENDOR, 'Motorola'], [self::TYPE, self::TABLET]], [
 
                 // LG
                 '/((?=lg)?[vl]k\-?\d{3})\sbuild|\s3\.[\s\w;-]{10}lg?-([06cv9]{3,4})/i'
-            ], [self::MODEL, [self::VENDOR, 'LG'], [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, [self::VENDOR, 'LG'], [self::TYPE, self::TABLET]], [
                 '/(lm-?f100[nv]?|nexus\s[45])/i',
                 '/lg[e;\s\/-]+((?!browser|netcast)\w+)/i',
                 '/\blg(\-?[\d\w]+)\sbuild/i'
-            ], [self::MODEL, [self::VENDOR, 'LG'], [self::TYPE, self::MOBILE]], [
+                ], [self::MODEL, [self::VENDOR, 'LG'], [self::TYPE, self::MOBILE]], [
 
                 // Lenovo
                 '/(ideatab[\w\-\s]+)/i',
                 '/lenovo\s?(s(?:5000|6000)(?:[\w-]+)|tab(?:[\s\w]+)|yt[\d\w-]{6}|tb[\d\w-]{6})/i'        // Lenovo tablets
-            ], [self::MODEL, [self::VENDOR, 'Lenovo'], [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, [self::VENDOR, 'Lenovo'], [self::TYPE, self::TABLET]], [
 
                 // Nokia
                 '/(?:maemo|nokia).*(n900|lumia\s\d+)/i',
                 '/nokia[\s_-]?([\w\.-]*)/i'
-            ], [[self::MODEL, '/_/', ' '], [self::VENDOR, 'Nokia'], [self::TYPE, self::MOBILE]], [
+                ], [[self::MODEL, '/_/', ' '], [self::VENDOR, 'Nokia'], [self::TYPE, self::MOBILE]], [
 
                 // Google
                 '/droid.+;\s(pixel\sc)[\s)]/i'                                        // Google Pixel C
-            ], [self::MODEL, [self::VENDOR, 'Google'], [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, [self::VENDOR, 'Google'], [self::TYPE, self::TABLET]], [
                 '/droid.+;\s(pixel[\s\daxl]{0,6})(?:\sbuild|\))/i'                    // Google Pixel
-            ], [self::MODEL, [self::VENDOR, 'Google'], [self::TYPE, self::MOBILE]], [
+                ], [self::MODEL, [self::VENDOR, 'Google'], [self::TYPE, self::MOBILE]], [
 
                 // Sony
                 '/droid.+\s([c-g]\d{4}|so[-l]\w+|xq-a\w[4-7][12])(?=\sbuild\/|\).+chrome\/(?![1-6]{0,1}\d\.))/i'
-            ], [self::MODEL, [self::VENDOR, 'Sony'], [self::TYPE, self::MOBILE]], [
+                ], [self::MODEL, [self::VENDOR, 'Sony'], [self::TYPE, self::MOBILE]], [
                 '/sony\stablet\s[ps]\sbuild\//i',
                 '/(?:sony)?sgp\w+(?:\sbuild\/|\))/i'
-            ], [[self::MODEL, 'Xperia Tablet'], [self::VENDOR, 'Sony'], [self::TYPE, self::TABLET]], [
+                ], [[self::MODEL, 'Xperia Tablet'], [self::VENDOR, 'Sony'], [self::TYPE, self::TABLET]], [
 
                 // OnePlus
                 '/\s(kb2005|in20[12]5|be20[12][59])\b/i',
                 '/\ba000(1)\sbuild/i',                                                // OnePlus
                 '/\boneplus\s(a\d{4})[\s)]/i'
-            ], [self::MODEL, [self::VENDOR, 'OnePlus'], [self::TYPE, self::MOBILE]], [
+                ], [self::MODEL, [self::VENDOR, 'OnePlus'], [self::TYPE, self::MOBILE]], [
 
                 // Amazon
                 '/(alexa)webm/i',
                 '/(kf[a-z]{2}wi)(\sbuild\/|\))/i',                                    // Kindle Fire without Silk
                 '/(kf[a-z]+)(\sbuild\/|\)).+silk\//i'                                 // Kindle Fire HD
-            ], [self::MODEL, [self::VENDOR, 'Amazon'], [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, [self::VENDOR, 'Amazon'], [self::TYPE, self::TABLET]], [
                 '/(sd|kf)[0349hijorstuw]+(\sbuild\/|\)).+silk\//i'                    // Fire Phone
-            ], [[self::MODEL, 'Fire Phone'], [self::VENDOR, 'Amazon'], [self::TYPE, self::MOBILE]], [
+                ], [[self::MODEL, 'Fire Phone'], [self::VENDOR, 'Amazon'], [self::TYPE, self::MOBILE]], [
 
                 // BlackBerry
                 '/\((playbook);[\w\s\),;-]+(rim)/i'                                     // BlackBerry PlayBook
-            ], [self::MODEL, self::VENDOR, [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, self::VENDOR, [self::TYPE, self::TABLET]], [
                 '/((?:bb[a-f]|st[hv])100-\d)/i',
                 '/\(bb10;\s(\w+)/i'                                                     // BlackBerry 10
-            ], [self::MODEL, [self::VENDOR, self::BLACKBERRY], [self::TYPE, self::MOBILE]], [
+                ], [self::MODEL, [self::VENDOR, 'BlackBerry'], [self::TYPE, self::MOBILE]], [
 
                 // Asus
                 '/(?:\b|asus_)(transfo[prime\s]{4,10}\s\w+|eeepc|slider\s\w+|nexus\s7|padfone|p00[cj])/i'
-            ], [self::MODEL, [self::VENDOR, self::ASUS], [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, [self::VENDOR, 'ASUS'], [self::TYPE, self::TABLET]], [
                 '/\s(z[es]6[027][01][km][ls]|zenfone\s\d\w?)\b/i'
-            ], [self::MODEL, [self::VENDOR, self::ASUS], [self::TYPE, self::MOBILE]], [
+                ], [self::MODEL, [self::VENDOR, 'ASUS'], [self::TYPE, self::MOBILE]], [
 
                 // Asus
                 '/(?:\b|asus_)(transfo[prime\s]{4,10}\s\w+|eeepc|slider\s\w+|nexus\s7|padfone|p00[cj])/i'
-            ], [self::MODEL, [self::VENDOR, 'ASUS'], [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, [self::VENDOR, 'ASUS'], [self::TYPE, self::TABLET]], [
                 '/\s(z[es]6[027][01][km][ls]|zenfone\s\d\w?)\b/i'
-            ], [self::MODEL, [self::VENDOR, 'ASUS'], [self::TYPE, self::MOBILE]], [
+                ], [self::MODEL, [self::VENDOR, 'ASUS'], [self::TYPE, self::MOBILE]], [
 
                 // HTC
                 '/(nexus\s9)/i'                                                       // HTC Nexus 9
-            ], [self::MODEL, [self::VENDOR, 'HTC'], [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, [self::VENDOR, 'HTC'], [self::TYPE, self::TABLET]], [
                 '/(htc)[;_\s-]{1,2}([\w\s]+(?=\)|\sbuild)|\w+)/i',                    // HTC
 
                 // ZTE
                 '/(zte)-(\w*)/i',
-                '/(alcatel|geeksphone|nexian|panasonic|(?=;\s)sony)[_\s-]?([\w-]*)/i' // Alcatel/GeeksPhone/Nexian/Panasonic/Sony
-            ], [self::VENDOR, [self::MODEL, '/_/', ' '], [self::TYPE, self::MOBILE]], [
+                '/(alcatel|geeksphone|nexian|panasonic|(?=;\s)sony)[_\s-]?([\w-]*)/i'       // Alcatel/GeeksPhone/Nexian/Panasonic/Sony
+                ], [self::VENDOR, [self::MODEL, '/_/', ' '], [self::TYPE, self::MOBILE]], [
 
                 // Acer
                 '/droid[x\d\.\s;]+\s([ab][1-7]\-?[0178a]\d\d?)/i'
-            ], [self::MODEL, [self::VENDOR, 'Acer'], [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, [self::VENDOR, 'Acer'], [self::TYPE, self::TABLET]], [
 
                 // Meizu
                 '/droid.+;\s(m[1-5]\snote)\sbuild/i',
                 '/\bmz-([\w-]{2,})/i'
-            ], [self::MODEL, [self::VENDOR, 'Meizu'], [self::TYPE, self::MOBILE]], [
+                ], [self::MODEL, [self::VENDOR, 'Meizu'], [self::TYPE, self::MOBILE]], [
 
                 // MIXED
                 '/(blackberry|benq|palm(?=\-)|sonyericsson|acer|asus|dell|meizu|motorola|polytron)[\s_-]?([\w-]*)/i',
-                // BlackBerry/BenQ/Palm/Sony-Ericsson/Acer/Asus/Dell/Meizu/Motorola/Polytron
-                '/(hp)\s([\w\s]+\w)/i',                                               // HP iPAQ
-                '/(asus)-?(\w+)/i',                                                   // Asus
-                '/(microsoft);\s(lumia[\s\w]+)/i',                                    // Microsoft Lumia
-                '/(lenovo)[_\s-]?([\w-]+)/i',                                         // Lenovo
-                '/linux;.+(jolla);/i',                                                // Jolla
-                '/droid.+;\s(oppo)\s?([\w\s]+)\sbuild/i'                              // OPPO
-            ], [self::VENDOR, self::MODEL, [self::TYPE, self::MOBILE]], [
+                                                                                        // BlackBerry/BenQ/Palm/Sony-Ericsson/Acer/Asus/Dell/Meizu/Motorola/Polytron
+                '/(hp)\s([\w\s]+\w)/i',                                                 // HP iPAQ
+                '/(asus)-?(\w+)/i',                                                     // Asus
+                '/(microsoft);\s(lumia[\s\w]+)/i',                                      // Microsoft Lumia
+                '/(lenovo)[_\s-]?([\w-]+)/i',                                           // Lenovo
+                '/linux;.+(jolla);/i',                                                  // Jolla
+                '/droid.+;\s(oppo)\s?([\w\s]+)\sbuild/i'                                // OPPO
+                ], [self::VENDOR, self::MODEL, [self::TYPE, self::MOBILE]], [
 
                 '/(archos)\s(gamepad2?)/i',                                           // Archos
                 '/(hp).+(touchpad(?!.+tablet)|tablet)/i',                             // HP TouchPad
@@ -461,65 +444,65 @@ class UAParser
                 '/[;\/]\s?(trinity)[\-\s]*(t\d{3})\sbuild/i',                         // Trinity Tablets
                 '/\b(gigaset)[\s\-]+(q\w{1,9})\sbuild/i',                             // Gigaset Tablets
                 '/\b(vodafone)\s([\w\s]+)(?:\)|\sbuild)/i'                            // Vodafone
-            ], [self::VENDOR, self::MODEL, [self::TYPE, self::TABLET]], [
+                ], [self::VENDOR, self::MODEL, [self::TYPE, self::TABLET]], [
 
                 '/\s(surface\sduo)\s/i'                                               // Surface Duo
-            ], [self::MODEL, [self::VENDOR, 'Microsoft'], [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, [self::VENDOR, 'Microsoft'], [self::TYPE, self::TABLET]], [
                 '/droid\s[\d\.]+;\s(fp\du?)\sbuild/i'
-            ], [self::MODEL, [self::VENDOR, 'Fairphone'], [self::TYPE, self::MOBILE]], [
+                ], [self::MODEL, [self::VENDOR, 'Fairphone'], [self::TYPE, self::MOBILE]], [
                 '/\s(u304aa)\sbuild/i'                                                // AT&T
-            ], [self::MODEL, [self::VENDOR, 'AT&T'], [self::TYPE, self::MOBILE]], [
+                ], [self::MODEL, [self::VENDOR, 'AT&T'], [self::TYPE, self::MOBILE]], [
                 '/sie-(\w*)/i'                                                        // Siemens
-            ], [self::MODEL, [self::VENDOR, 'Siemens'], [self::TYPE, self::MOBILE]], [
+                ], [self::MODEL, [self::VENDOR, 'Siemens'], [self::TYPE, self::MOBILE]], [
                 '/[;\/]\s?(rct\w+)\sbuild/i'                                          // RCA Tablets
-            ], [self::MODEL, [self::VENDOR, 'RCA'], [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, [self::VENDOR, 'RCA'], [self::TYPE, self::TABLET]], [
                 '/[;\/\s](venue[\d\s]{2,7})\sbuild/i'                                 // Dell Venue Tablets
-            ], [self::MODEL, [self::VENDOR, 'Dell'], [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, [self::VENDOR, 'Dell'], [self::TYPE, self::TABLET]], [
                 '/[;\/]\s?(q(?:mv|ta)\w+)\sbuild/i'                                   // Verizon Tablet
-            ], [self::MODEL, [self::VENDOR, 'Verizon'], [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, [self::VENDOR, 'Verizon'], [self::TYPE, self::TABLET]], [
                 '/[;\/]\s(?:barnes[&\s]+noble\s|bn[rt])([\w\s\+]*)\sbuild/i'          // Barnes & Noble Tablet
-            ], [self::MODEL, [self::VENDOR, 'Barnes & Noble'], [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, [self::VENDOR, 'Barnes & Noble'], [self::TYPE, self::TABLET]], [
                 '/[;\/]\s(tm\d{3}\w+)\sbuild/i'
-            ], [self::MODEL, [self::VENDOR, 'NuVision'], [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, [self::VENDOR, 'NuVision'], [self::TYPE, self::TABLET]], [
                 '/;\s(k88)\sbuild/i'                                                  // ZTE K Series Tablet
-            ], [self::MODEL, [self::VENDOR, 'ZTE'], [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, [self::VENDOR, 'ZTE'], [self::TYPE, self::TABLET]], [
                 '/;\s(nx\d{3}j)\sbuild/i'                                             // ZTE Nubia
-            ], [self::MODEL, [self::VENDOR, 'ZTE'], [self::TYPE, self::MOBILE]], [
+                ], [self::MODEL, [self::VENDOR, 'ZTE'], [self::TYPE, self::MOBILE]], [
                 '/[;\/]\s?(gen\d{3})\sbuild.*49h/i'                                   // Swiss GEN Mobile
-            ], [self::MODEL, [self::VENDOR, 'Swiss'], [self::TYPE, self::MOBILE]], [
+                ], [self::MODEL, [self::VENDOR, 'Swiss'], [self::TYPE, self::MOBILE]], [
                 '/[;\/]\s?(zur\d{3})\sbuild/i'                                        // Swiss ZUR Tablet
-            ], [self::MODEL, [self::VENDOR, 'Swiss'], [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, [self::VENDOR, 'Swiss'], [self::TYPE, self::TABLET]], [
                 '/[;\/]\s?((zeki)?tb.*\b)\sbuild/i'                                   // Zeki Tablets
-            ], [self::MODEL, [self::VENDOR, 'Zeki'], [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, [self::VENDOR, 'Zeki'], [self::TYPE, self::TABLET]], [
                 '/[;\/]\s([yr]\d{2})\sbuild/i',
                 '/[;\/]\s(dragon[\-\s]+touch\s|dt)(\w{5})\sbuild/i'                   // Dragon Touch Tablet
-            ], [[self::VENDOR, 'Dragon Touch'], self::MODEL, [self::TYPE, self::TABLET]], [
+                ], [[self::VENDOR, 'Dragon Touch'], self::MODEL, [self::TYPE, self::TABLET]], [
                 '/[;\/]\s?(ns-?\w{0,9})\sbuild/i'                                     // Insignia Tablets
-            ], [self::MODEL, [self::VENDOR, 'Insignia'], [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, [self::VENDOR, 'Insignia'], [self::TYPE, self::TABLET]], [
                 '/[;\/]\s?((nxa|Next)-?\w{0,9})\sbuild/i'                             // NextBook Tablets
-            ], [self::MODEL, [self::VENDOR, 'NextBook'], [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, [self::VENDOR, 'NextBook'], [self::TYPE, self::TABLET]], [
                 '/[;\/]\s?(xtreme\_)?(v(1[045]|2[015]|[3469]0|7[05]))\sbuild/i'
-            ], [[self::VENDOR, 'Voice'], self::MODEL, [self::TYPE, self::MOBILE]], [                    // Voice Xtreme Phones
-                '/[;\/]\s?(lvtel\-)?(v1[12])\sbuild/i'                                // LvTel Phones
-            ], [[self::VENDOR, 'LvTel'], self::MODEL, [self::TYPE, self::MOBILE]], [
+                ], [[self::VENDOR, 'Voice'], self::MODEL, [self::TYPE, self::MOBILE]], [        // Voice Xtreme Phones
+                '/[;\/]\s?(lvtel\-)?(v1[12])\sbuild/i'                                          // LvTel Phones
+                ], [[self::VENDOR, 'LvTel'], self::MODEL, [self::TYPE, self::MOBILE]], [
                 '/;\s(ph-1)\s/i'
-            ], [self::MODEL, [self::VENDOR, 'Essential'], [self::TYPE, self::MOBILE]], [                // Essential PH-1
-                '/[;\/]\s?(v(100md|700na|7011|917g).*\b)\sbuild/i'                    // Envizen Tablets
-            ], [self::MODEL, [self::VENDOR, 'Envizen'], [self::TYPE, self::TABLET]], [
-                '/[;\/]\s?(trio[\s\w\-\.]+)\sbuild/i'                                 // MachSpeed Tablets
-            ], [self::MODEL, [self::VENDOR, 'MachSpeed'], [self::TYPE, self::TABLET]], [
-                '/[;\/]\s?tu_(1491)\sbuild/i'                                         // Rotor Tablets
-            ], [self::MODEL, [self::VENDOR, 'Rotor'], [self::TYPE, self::TABLET]], [
-                '/(shield[\w\s]+)\sbuild/i'                                           // Nvidia Shield Tablets
-            ], [self::MODEL, [self::VENDOR, 'Nvidia'], [self::TYPE, self::TABLET]], [
-                '/(sprint)\s(\w+)/i'                                                  // Sprint Phones
-            ], [self::VENDOR, self::MODEL, [self::TYPE, self::MOBILE]], [
-                '/(kin\.[onetw]{3})/i'                                                // Microsoft Kin
-            ], [[self::MODEL, '/./', ' '], [self::VENDOR, 'Microsoft'], [self::TYPE, self::MOBILE]], [
-                '/droid\s[\d\.]+;\s(cc6666?|et5[16]|mc[239][23]x?|vc8[03]x?)\)/i'     // Zebra
-            ], [self::MODEL, [self::VENDOR, 'Zebra'], [self::TYPE, self::TABLET]], [
+                ], [self::MODEL, [self::VENDOR, 'Essential'], [self::TYPE, self::MOBILE]], [    // Essential PH-1
+                '/[;\/]\s?(v(100md|700na|7011|917g).*\b)\sbuild/i'                              // Envizen Tablets
+                ], [self::MODEL, [self::VENDOR, 'Envizen'], [self::TYPE, self::TABLET]], [
+                '/[;\/]\s?(trio[\s\w\-\.]+)\sbuild/i'                                           // MachSpeed Tablets
+                ], [self::MODEL, [self::VENDOR, 'MachSpeed'], [self::TYPE, self::TABLET]], [
+                '/[;\/]\s?tu_(1491)\sbuild/i'                                                   // Rotor Tablets
+                ], [self::MODEL, [self::VENDOR, 'Rotor'], [self::TYPE, self::TABLET]], [
+                '/(shield[\w\s]+)\sbuild/i'                                                     // Nvidia Shield Tablets
+                ], [self::MODEL, [self::VENDOR, 'Nvidia'], [self::TYPE, self::TABLET]], [
+                '/(sprint)\s(\w+)/i'                                                            // Sprint Phones
+                ], [self::VENDOR, self::MODEL, [self::TYPE, self::MOBILE]], [
+                '/(kin\.[onetw]{3})/i'                                                          // Microsoft Kin
+                ], [[self::MODEL, '/./', ' '], [self::VENDOR, 'Microsoft'], [self::TYPE, self::MOBILE]], [
+                '/droid\s[\d\.]+;\s(cc6666?|et5[16]|mc[239][23]x?|vc8[03]x?)\)/i'               // Zebra
+                ], [self::MODEL, [self::VENDOR, 'Zebra'], [self::TYPE, self::TABLET]], [
                 '/droid\s[\d\.]+;\s(ec30|ps20|tc[2-8]\d[kx])\)/i'
-            ], [self::MODEL, [self::VENDOR, 'Zebra'], [self::TYPE, self::MOBILE]], [
+                ], [self::MODEL, [self::VENDOR, 'Zebra'], [self::TYPE, self::MOBILE]], [
 
                 ///////////////////
                 // CONSOLES
@@ -527,70 +510,70 @@ class UAParser
 
                 '/\s(ouya)\s/i',                                                      // Ouya
                 '/(nintendo)\s([wids3utch]+)/i'                                       // Nintendo
-            ], [self::VENDOR, self::MODEL, [self::TYPE, self::CONSOLE]], [
+                ], [self::VENDOR, self::MODEL, [self::TYPE, self::CONSOLE]], [
                 '/droid.+;\s(shield)\sbuild/i'                                        // Nvidia
-            ], [self::MODEL, [self::VENDOR, 'Nvidia'], [self::TYPE, self::CONSOLE]], [
+                ], [self::MODEL, [self::VENDOR, 'Nvidia'], [self::TYPE, self::CONSOLE]], [
                 '/(playstation\s[345portablevi]+)/i'                                  // Playstation
-            ], [self::MODEL, [self::VENDOR, 'Sony'], [self::TYPE, self::CONSOLE]], [
+                ], [self::MODEL, [self::VENDOR, 'Sony'], [self::TYPE, self::CONSOLE]], [
                 '/[\s\(;](xbox(?:\sone)?(?!;\sxbox))[\s\);]/i'                        // Microsoft Xbox
-            ], [self::MODEL, [self::VENDOR, 'Microsoft'], [self::TYPE, self::CONSOLE]], [
+                ], [self::MODEL, [self::VENDOR, 'Microsoft'], [self::TYPE, self::CONSOLE]], [
 
                 ///////////////////
                 // SMARTTVS
                 ///////////////////
 
-                '/smart-tv.+(samsung)/i'                                              // Samsung
-            ], [self::VENDOR, [self::TYPE, self::SMARTTV]], [
+                '/smart-tv.+(samsung)/i'                                                    // Samsung
+                ], [self::VENDOR, [self::TYPE, self::SMARTTV]], [
                 '/hbbtv.+maple;(\d+)/i'
-            ], [[self::MODEL, '/^/', 'SmartTV'], [self::VENDOR, 'Samsung'], [self::TYPE, self::SMARTTV]], [
-                '/(?:linux;\snetcast.+smarttv|lg\snetcast\.tv-201\d)/i',              // LG SmartTV
-            ], [[self::VENDOR, 'LG'], [self::TYPE, self::SMARTTV]], [
-                '/(apple)\s?tv/i'                                                     // Apple TV
-            ], [self::VENDOR, [self::MODEL, 'Apple TV'], [self::TYPE, self::SMARTTV]], [
-                '/crkey/i'                                                            // Google Chromecast
-            ], [[self::MODEL, 'Chromecast'], [self::VENDOR, 'Google'], [self::TYPE, self::SMARTTV]], [
-                '/droid.+aft([\w])(\sbuild\/|\))/i'                                   // Fire TV
-            ], [self::MODEL, [self::VENDOR, 'Amazon'], [self::TYPE, self::SMARTTV]], [
-                '/\(dtv[\);].+(aquos)/i'                                              // Sharp
-            ], [self::MODEL, [self::VENDOR, 'Sharp'], [self::TYPE, self::SMARTTV]], [
-                '/hbbtv\/\d+\.\d+\.\d+\s+\([\w\s]*;\s*(\w[^;]*);([^;]*)/i'            // HbbTV devices
-            ], [[self::VENDOR, function ($str) {return $this->util->trim($str);}], [self::MODEL, function ($str) {return $this->util->trim($str);}], [self::TYPE, self::SMARTTV]], [
-                '/[\s\/\(](android\s|smart[-\s]?|opera\s)tv[;\)\s]/i'                 // SmartTV from Unidentified Vendors
-            ], [[self::TYPE, self::SMARTTV]], [
+                ], [[self::MODEL, '/^/', 'SmartTV'], [self::VENDOR, 'Samsung'], [self::TYPE, self::SMARTTV]], [
+                '/(?:linux;\snetcast.+smarttv|lg\snetcast\.tv-201\d)/i',                    // LG SmartTV
+                ], [[self::VENDOR, 'LG'], [self::TYPE, self::SMARTTV]], [
+                '/(apple)\s?tv/i'                                                           // Apple TV
+                ], [self::VENDOR, [self::MODEL, 'Apple TV'], [self::TYPE, self::SMARTTV]], [
+                '/crkey/i'                                                                  // Google Chromecast
+                ], [[self::MODEL, 'Chromecast'], [self::VENDOR, 'Google'], [self::TYPE, self::SMARTTV]], [
+                '/droid.+aft([\w])(\sbuild\/|\))/i'                                         // Fire TV
+                ], [self::MODEL, [self::VENDOR, 'Amazon'], [self::TYPE, self::SMARTTV]], [
+                '/\(dtv[\);].+(aquos)/i'                                                    // Sharp
+                ], [self::MODEL, [self::VENDOR, 'Sharp'], [self::TYPE, self::SMARTTV]], [
+                '/hbbtv\/\d+\.\d+\.\d+\s+\([\w\s]*;\s*(\w[^;]*);([^;]*)/i'                  // HbbTV devices
+                ], [[self::VENDOR, function ($str) {return $this->util->trim($str);}], [self::MODEL, function ($str) {return $this->util->trim($str);}], [self::TYPE, self::SMARTTV]], [
+                '/[\s\/\(](android\s|smart[-\s]?|opera\s)tv[;\)\s]/i'                       // SmartTV from Unidentified Vendors
+                ], [[self::TYPE, self::SMARTTV]], [
 
                 ///////////////////
                 // WEARABLES
                 ///////////////////
 
                 '/((pebble))app\/[\d\.]+\s/i'                                         // Pebble
-            ], [self::VENDOR, self::MODEL, [self::TYPE, self::WEARABLE]], [
+                ], [self::VENDOR, self::MODEL, [self::TYPE, self::WEARABLE]], [
                 '/droid.+;\s(glass)\s\d/i'                                            // Google Glass
-            ], [self::MODEL, [self::VENDOR, 'Google'], [self::TYPE, self::WEARABLE]], [
+                ], [self::MODEL, [self::VENDOR, 'Google'], [self::TYPE, self::WEARABLE]], [
                 '/droid\s[\d\.]+;\s(wt63?0{2,3})\)/i'
-            ], [self::MODEL, [self::VENDOR, 'Zebra'], [self::TYPE, self::WEARABLE]], [
+                ], [self::MODEL, [self::VENDOR, 'Zebra'], [self::TYPE, self::WEARABLE]], [
 
                 ///////////////////
                 // EMBEDDED
                 ///////////////////
 
                 '/(tesla)(?:\sqtcarbrowser|\/20[12]\d\.[\w\.-]+)/i'                   // Tesla
-            ], [self::VENDOR, [self::TYPE, self::EMBEDDED]], [
+                ], [self::VENDOR, [self::TYPE, self::EMBEDDED]], [
 
                 ////////////////////
                 // MIXED (GENERIC)
                 ///////////////////
 
-                '/droid .+?; ([^;]+?)(?: build|\) applewebkit).+? mobile safari/i'    // Android Phones from Unidentified Vendors
-            ], [self::MODEL, [self::TYPE, self::MOBILE]], [
-                '/droid .+?;\s([^;]+?)(?: build|\) applewebkit).+?(?! mobile) safari/i'  // Android Tablets from Unidentified Vendors
-            ], [self::MODEL, [self::TYPE, self::TABLET]], [
-                '/\s(tablet|tab)[;\/]/i',                                             // Unidentifiable Tablet
-                '/\s(mobile)(?:[;\/]|\ssafari)/i'                                     // Unidentifiable Mobile
-            ], [[self::MODEL, function ($str) {return $this->util->lowerize($str);}]], [
-                '/(android[\w\.\s\-]{0,9});.+build/i'                                 // Generic Android Device
-            ], [self::MODEL, [self::VENDOR, 'Generic']], [
+                '/droid .+?; ([^;]+?)(?: build|\) applewebkit).+? mobile safari/i'              // Android Phones from Unidentified Vendors
+                ], [self::MODEL, [self::TYPE, self::MOBILE]], [
+                '/droid .+?;\s([^;]+?)(?: build|\) applewebkit).+?(?! mobile) safari/i'         // Android Tablets from Unidentified Vendors
+                ], [self::MODEL, [self::TYPE, self::TABLET]], [
+                '/\s(tablet|tab)[;\/]/i',                                                       // Unidentifiable Tablet
+                '/\s(mobile)(?:[;\/]|\ssafari)/i'                                               // Unidentifiable Mobile
+                ], [[self::MODEL, function ($str) {return $this->util->lowerize($str);}]], [
+                '/(android[\w\.\s\-]{0,9});.+build/i'                                           // Generic Android Device
+                ], [self::MODEL, [self::VENDOR, 'Generic']], [
                 '/(phone)/i'
-            ], [[self::TYPE, self::MOBILE]]
+                ], [[self::TYPE, self::MOBILE]]
             ],
 
             'engine' => [[
@@ -609,45 +592,46 @@ class UAParser
             ],
 
             'os' => [[
+
                 // Windows
-                '/microsoft\s(windows)\s(vista|xp)/i'
-            ], [self::NAME, self::VERSION], [
-                '/(windows)\snt\s6\.2;\s(arm)/i',
-                '/(windows\sphone(?:\sos)*)[\s\/]?([\d\.\s\w]*)/i',
+                '/microsoft\s(windows)\s(vista|xp)/i'               // Windows (iTunes)
+                ], [self::NAME, self::VERSION], [
+                '/(windows)\snt\s6\.2;\s(arm)/i',                   // Windows RT
+                '/(windows\sphone(?:\sos)*)[\s\/]?([\d\.\s\w]*)/i', // Windows Phone
                 '/(windows\smobile|windows)[\s\/]?([ntce\d\.\s]+\w)(?!.+xbox)/i'
-            ], [self::NAME, [self::VERSION, function ($str, $map) {return $this->mapper->str($str, $map);}, $this->maps['os']['windows']['version']]], [
+                ], [self::NAME, [self::VERSION, function ($str, $map) {return $this->mapper->str($str, $map);}, $this->maps['os']['windows']['version']]], [
                 '/(win(?=3|9|n)|win\s9x\s)([nt\d\.]+)/i'
-            ], [[self::NAME, 'Windows'], [self::VERSION, function ($str, $map) {return $this->mapper->str($str, $map);}, $this->maps['os']['windows']['version']]], [
+                ], [[self::NAME, 'Windows'], [self::VERSION, function ($str, $map) {return $this->mapper->str($str, $map);}, $this->maps['os']['windows']['version']]], [
 
                 // iOS/macOS
                 '/ip[honead]{2,4}\b(?:.*os\s([\w]+)\slike\smac|;\sopera)/i',
                 '/cfnetwork\/.+darwin/i'
-            ], [[self::VERSION, '/_/', '.'], [self::NAME, 'iOS']], [
+                ], [[self::VERSION, '/_/', '.'], [self::NAME, 'iOS']], [
                 '/(mac\sos\sx)\s?([\w\s\.]*)/i',
                 '/(macintosh|mac(?=_powerpc)\s)(?!.+haiku)/i'
-            ], [[self::NAME, 'Mac OS'], [self::VERSION, '/_/', '.']], [
+                ], [[self::NAME, 'Mac OS'], [self::VERSION, '/_/', '.']], [
 
                 // Mobile OSes
                 '/(android|webos|palm\sos|qnx|bada|rim\stablet\sos|meego|sailfish|contiki)[\/\s-]?([\w\.]*)/i',
                 '/(blackberry)\w*\/([\w\.]*)/i',
                 '/(tizen|kaios)[\/\s]([\w\.]+)/i',
                 '/\((series40);/i'
-            ], [self::NAME, self::VERSION], [
+                ], [self::NAME, self::VERSION], [
                 '/\(bb(10);/i'
-            ], [self::VERSION, [self::NAME, 'BlackBerry']], [
+                ], [self::VERSION, [self::NAME, 'BlackBerry']], [
                 '/(?:symbian\s?os|symbos|s60(?=;)|series60)[\/\s-]?([\w\.]*)/i' // Symbian
-            ], [self::VERSION, [self::NAME, 'Symbian']], [
+                ], [self::VERSION, [self::NAME, 'Symbian']], [
                 '/mozilla.+\(mobile;.+gecko.+firefox/i'
-            ], [[self::NAME, 'Firefox OS']], [
+                ], [[self::NAME, 'Firefox OS']], [
                 '/web0s;.+rt(tv)/i',
                 '/\b(?:hp)?wos(?:browser)?\/([\w\.]+)/i'
-            ], [self::VERSION, [self::NAME, 'webOS']], [
+                ], [self::VERSION, [self::NAME, 'webOS']], [
 
                 // Google Chromecast
                 '/crkey\/([\d\.]+)/i'                           // Google Chromecast
-            ], [self::VERSION, [self::NAME, 'Chromecast']], [
+                ], [self::VERSION, [self::NAME, 'Chromecast']], [
                 '/(cros)\s[\w]+\s([\w\.]+\w)/i'                 // Chromium OS
-            ], [[self::NAME, 'Chromium OS'], self::VERSION],[
+                ], [[self::NAME, 'Chromium OS'], self::VERSION],[
 
                 // Console
                 '/(nintendo|playstation)\s([wids345portablevuch]+)/i',
@@ -665,16 +649,16 @@ class UAParser
                 // BSD based
                 '/\s([frentopc-]{0,4}bsd|dragonfly)\s?(?!amd|[ix346]{1,2}86)([\w\.]*)/i',
                 '/(haiku)\s(\w+)/i'
-            ], [self::NAME, self::VERSION], [
+                ], [self::NAME, self::VERSION], [
 
                 // Other
                 '/(sunos)\s?([\w\.\d]*)/i'
-            ], [[self::NAME, 'Solaris'], self::VERSION], [
+                ], [[self::NAME, 'Solaris'], self::VERSION], [
                 '/((?:open)?solaris)[\/\s-]?([\w\.]*)/i',
                 '/(aix)\s((\d)(?=\.|\)|\s)[\w\.])*/i',
                 '/(plan\s9|minix|beos|os\/2|amigaos|morphos|risc\sos|openvms|fuchsia)/i',
                 '/(unix)\s?([\w\.]*)/i'
-            ], [self::NAME, self::VERSION]
+                ], [self::NAME, self::VERSION]
             ]
         ];
 
