@@ -1,6 +1,6 @@
-![motikan2010/ua-parser-php workflow](https://github.com/motikan2010/ua-parser-php/actions/workflows/main.yml/badge.svg)
-
 # ua-parser-php
+
+![motikan2010/ua-parser-php workflow](https://github.com/motikan2010/ua-parser-php/actions/workflows/main.yml/badge.svg)
 
 ## About
 
