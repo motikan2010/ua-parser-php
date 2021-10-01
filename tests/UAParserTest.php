@@ -8,7 +8,7 @@ class UAParserTest extends \PHPUnit\Framework\TestCase
      */
     public function testBrowserDetection()
     {
-        $instance = new \Extead\UAParser\UAParser();
+        $instance = new \Motikan2010\UAParser\UAParser();
         $data = json_decode(file_get_contents(__DIR__ . "/data/browser-test.json"), true);
 
         foreach ($data as $item) {
@@ -26,7 +26,7 @@ class UAParserTest extends \PHPUnit\Framework\TestCase
      */
     public function testCpuDetection()
     {
-        $instance = new \Extead\UAParser\UAParser();
+        $instance = new \Motikan2010\UAParser\UAParser();
         $data = json_decode(file_get_contents(__DIR__ . "/data/cpu-test.json"), true);
 
         foreach ($data as $item) {
@@ -43,7 +43,7 @@ class UAParserTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeviceDetection()
     {
-        $instance = new \Extead\UAParser\UAParser();
+        $instance = new \Motikan2010\UAParser\UAParser();
         $data = json_decode(file_get_contents(__DIR__ . "/data/device-test.json"), true);
 
         foreach ($data as $item) {
@@ -62,7 +62,7 @@ class UAParserTest extends \PHPUnit\Framework\TestCase
      */
     public function testEngineDetection()
     {
-        $instance = new \Extead\UAParser\UAParser();
+        $instance = new \Motikan2010\UAParser\UAParser();
         $data = json_decode(file_get_contents(__DIR__ . "/data/engine-test.json"), true);
 
         foreach ($data as $item) {
@@ -80,7 +80,7 @@ class UAParserTest extends \PHPUnit\Framework\TestCase
      */
     public function testOsDetection()
     {
-        $instance = new \Extead\UAParser\UAParser();
+        $instance = new \Motikan2010\UAParser\UAParser();
         $data = json_decode(file_get_contents(__DIR__ . "/data/os-test.json"), true);
 
         foreach ($data as $item) {

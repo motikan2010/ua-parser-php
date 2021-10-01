@@ -1,6 +1,6 @@
 <?php
 
-namespace Extead\UAParser;
+namespace Motikan2010\UAParser;
 
 class Mapper
 {

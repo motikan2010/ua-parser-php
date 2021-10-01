@@ -1,6 +1,6 @@
 <?php
 
-namespace Extead\UAParser;
+namespace Motikan2010\UAParser;
 
 class Util
 {
@@ -57,4 +57,5 @@ class Util
     public function trim($str) {
         return preg_replace('/^[\s\xFEFF\xA0]+|[\s\xFEFF\xA0]+$/', '', $str);
     }
+
 }

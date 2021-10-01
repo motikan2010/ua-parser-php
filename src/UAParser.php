@@ -1,29 +1,29 @@
 <?php
 
-namespace Extead\UAParser;
+namespace Motikan2010\UAParser;
 
 class UAParser
 {
-    const LIBVERSION = '0.7.14';
-    const _EMPTY = '';
-    const UNKNOWN = '?';
-    const FUNC_TYPE = 'function';
-    const UNDEF_TYPE = 'undefined';
-    const OBJ_TYPE = 'object';
-    const STR_TYPE = 'string';
-    const MAJOR = 'major'; // deprecated
-    const MODEL = 'model';
-    const NAME = 'name';
-    const TYPE = 'type';
-    const VENDOR = 'vendor';
-    const VERSION = 'version';
-    const ARCHITECTURE = 'architecture';
-    const CONSOLE = 'console';
-    const MOBILE = 'mobile';
-    const TABLET = 'tablet';
-    const SMARTTV = 'smarttv';
-    const WEARABLE = 'wearable';
-    const EMBEDDED = 'embedded';
+    const LIBVERSION    = '0.7.28';
+    const _EMPTY        = '';
+    const UNKNOWN       = '?';
+    const FUNC_TYPE     = 'function';
+    const UNDEF_TYPE    = 'undefined';
+    const OBJ_TYPE      = 'object';
+    const STR_TYPE      = 'string';
+    const MAJOR         = 'major'; // deprecated
+    const MODEL         = 'model';
+    const NAME          = 'name';
+    const TYPE          = 'type';
+    const VENDOR        = 'vendor';
+    const VERSION       = 'version';
+    const ARCHITECTURE  = 'architecture';
+    const CONSOLE       = 'console';
+    const MOBILE        = 'mobile';
+    const TABLET        = 'tablet';
+    const SMARTTV       = 'smarttv';
+    const WEARABLE      = 'wearable';
+    const EMBEDDED      = 'embedded';
 
     /**
      * @var null
@@ -765,4 +765,5 @@ class UAParser
         $this->ua = $ua;
         return $this;
     }
+
 }
