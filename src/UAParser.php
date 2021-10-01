@@ -133,230 +133,145 @@ class UAParser
         $this->util = new Util();
 
         $this->rgxmap = [
-            'browser' => [
-                [
+            'browser' => [[
+
+                '/\b(?:crmo|crios)\/([\w\.]+)/i'                                      // Chrome for Android/iOS
+                ], [self::VERSION, [self::NAME, 'Chrome']], [
+                '/edg(?:e|ios|a)?\/([\w\.]+)/i'                                       // Microsoft Edge
+                ], [self::VERSION, [self::NAME, 'Edge']], [
 
                 // Presto based
                 '/(opera\smini)\/([\w\.-]+)/i',                                       // Opera Mini
-                '/(opera\s[mobiletab]+).+version\/([\w\.-]+)/i',                      // Opera Mobi/Tablet
-                '/(opera).+version\/([\w\.]+)/i',                                     // Opera > 9.80
-                '/(opera)[\/\s]+([\w\.]+)/i'                                          // Opera < 9.80
-            ], [self::NAME, self::VERSION], [
-
-                '/(opios)[\/\s]+([\w\.]+)/i'                                          // Opera mini on iphone >= 8.0
-            ], [[self::NAME, 'Opera Mini'], self::VERSION], [
-
-                '/\s(opr)\/([\w\.]+)/i'                                               // Opera Webkit
-            ], [[self::NAME, 'Opera'], self::VERSION], [
+                '/(opera\s[mobiletab]{3,6})\b.+version\/([\w\.-]+)/i',                // Opera Mobi/Tablet
+                '/(opera)(?:.+version\/|[\/\s]+)([\w\.]+)/i',                         // Opera
+                ], [self::NAME, self::VERSION], [
+                '/opios[\/\s]+([\w\.]+)/i'                                            // Opera mini on iphone >= 8.0
+                ], [self::VERSION, [self::NAME, 'Opera Mini']], [
+                '/\sopr\/([\w\.]+)/i'                                                 // Opera Webkit
+                ], [self::VERSION, [self::NAME, 'Opera']], [
 
                 // Mixed
                 '/(kindle)\/([\w\.]+)/i',                                             // Kindle
-                '/(lunascape|maxthon|netfront|jasmine|blazer)[\/\s]?([\w\.]+)*/i',
-                // Lunascape/Maxthon/Netfront/Jasmine/Blazer
-
+                '/(lunascape|maxthon|netfront|jasmine|blazer)[\/\s]?([\w\.]*)/i',     // Lunascape/Maxthon/Netfront/Jasmine/Blazer
                 // Trident based
-                '/(avant\s|iemobile|slim|baidu)(?:browser)?[\/\s]?([\w\.]*)/i',
-                // Avant/I'EMobile/SlimBrowser/Baidu
+                '/(avant\s|iemobile|slim)(?:browser)?[\/\s]?([\w\.]*)/i',             // Avant/IEMobile/SlimBrowser
+                '/(ba?idubrowser)[\/\s]?([\w\.]+)/i',                                 // Baidu Browser
                 '/(?:ms|\()(ie)\s([\w\.]+)/i',                                        // Internet Explorer
 
                 // Webkit/KHTML based
-                '/(rekonq)\/([\w\.]+)*/i',                                            // Rekonq
-                '/(chromium|flock|rockmelt|midori|epiphany|silk|skyfire|ovibrowser|bolt|iron|vivaldi|iridium|phantomjs|bowser)\/([\w\.-]+)/i'
-                // Chromium/Flock/RockMelt/Midori/Epiphany/Silk/Skyfire/Bolt/Iron/I'ridium/PhantomJS/Bowser
-            ], [self::NAME, self::VERSION], [
-
-                '/(trident).+rv[:\s]([\w\.]+).+like\sgecko/i'                         // IE11
-            ], [[self::NAME, 'IE'], self::VERSION], [
-
-                '/(edge)\/((\d+)?[\w\.]+)/i'                                          // Microsoft Edge
-            ], [self::NAME, self::VERSION], [
-
-                '/(yabrowser)\/([\w\.]+)/i'                                           // Yandex
-            ], [[self::NAME, 'Yandex'], self::VERSION], [
-
-                '/(puffin)\/([\w\.]+)/i'                                              // Puffin
-            ], [[self::NAME, 'Puffin'], self::VERSION], [
-
-                '/((?:[\s\/])uc?\s?browser|(?:juc.+)ucweb)[\/\s]?([\w\.]+)/i'
-                // UCBrowser
-            ], [[self::NAME, 'UCBrowser'], self::VERSION], [
-
+                '/(flock|rockmelt|midori|epiphany|silk|skyfire|ovibrowser|bolt|iron|vivaldi|iridium|phantomjs|bowser|quark|qupzilla|falkon)\/([\w\.-]+)/i',
+                                                                                        // Flock/RockMelt/Midori/Epiphany/Silk/Skyfire/Bolt/Iron/Iridium/PhantomJS/Bowser/QupZilla/Falkon
+                '/(rekonq|puffin|brave|whale|qqbrowserlite|qq)\/([\w\.]+)/i',           // Rekonq/Puffin/Brave/Whale/QQBrowserLite/QQ, aka ShouQ
+                '/(weibo)__([\d\.]+)/i'                                                 // Weibo
+                ], [self::NAME, self::VERSION], [
+                '/(?:[\s\/]uc?\s?browser|(?:juc.+)ucweb)[\/\s]?([\w\.]+)/i'             // UCBrowser
+                ], [self::VERSION, [self::NAME, 'UCBrowser']], [
+                '/(?:windowswechat)?\sqbcore\/([\w\.]+)\b.*(?:windowswechat)?/i'      // WeChat Desktop for Windows Built-in Browser
+                ], [self::VERSION, [self::NAME, 'WeChat(Win) Desktop']], [
+                '/micromessenger\/([\w\.]+)/i'                                        // WeChat
+                ], [self::VERSION, [self::NAME, 'WeChat']], [
+                '/konqueror\/([\w\.]+)/i'                                             // Konqueror
+                ], [self::VERSION, [self::NAME, 'Konqueror']], [
+                '/trident.+rv[:\s]([\w\.]{1,9})\b.+like\sgecko/i'                     // IE11
+                ], [self::VERSION, [self::NAME, 'IE']], [
+                '/yabrowser\/([\w\.]+)/i'                                             // Yandex
+                ], [self::VERSION, [self::NAME, 'Yandex']], [
+                '/(avast|avg)\/([\w\.]+)/i'                                           // Avast/AVG Secure Browser
+                ], [[self::NAME, '/(.+)/', '$1 Secure Browser'], self::VERSION], [
+                '/focus\/([\w\.]+)/i'                                                 // Firefox Focus
+                ], [self::VERSION, [self::NAME, 'Firefox Focus']], [
+                '/opt\/([\w\.]+)/i'                                                   // Opera Touch
+                ], [self::VERSION, [self::NAME, 'Opera Touch']], [
+                '/coc_coc_browser\/([\w\.]+)/i'                                       // Coc Coc Browser
+                ], [self::VERSION, [self::NAME, 'Coc Coc']], [
+                '/dolfin\/([\w\.]+)/i'                                                // Dolphin
+                ], [self::VERSION, [self::NAME, 'Dolphin']], [
+                '/coast\/([\w\.]+)/i'                                                 // Opera Coast
+                ], [self::VERSION, [self::NAME, 'Opera Coast']], [
+                '/xiaomi\/miuibrowser\/([\w\.]+)/i'                                  // MIUI Browser
+                ], [self::VERSION, [self::NAME, 'MIUI Browser']], [
+                '/fxios\/([\w\.-]+)/i'                                                // Firefox for iOS
+                ], [self::VERSION, [self::NAME, 'Firefox']], [
+                '/(qihu|qhbrowser|qihoobrowser|360browser)/i'                         // 360
+                ], [[self::NAME, '360 Browser']], [
+                '/(oculus|samsung|sailfish)browser\/([\w\.]+)/i'
+                ], [[self::NAME, '/(.+)/', '$1 Browser'], self::VERSION], [                       // Oculus/Samsung/Sailfish Browser
                 '/(comodo_dragon)\/([\w\.]+)/i'                                       // Comodo Dragon
-            ], [[self::NAME, '/_/', ' '], self::VERSION], [
+                ], [[self::NAME, '/_/', ' '], self::VERSION], [
+                '/\s(electron)\/([\w\.]+)\ssafari/i',                                 // Electron-based App
+                '/(tesla)(?:\sqtcarbrowser|\/(20[12]\d\.[\w\.-]+))/i',                // Tesla
+                '/m?(qqbrowser|baiduboxapp|2345Explorer)[\/\s]?([\w\.]+)/i'           // QQBrowser/Baidu App/2345 Browser
+                ], [self::NAME, self::VERSION], [
+                '/(MetaSr)[\/\s]?([\w\.]+)/i',                                        // SouGouBrowser
+                '/(LBBROWSER)/i'                                                      // LieBao Browser
+                ], [self::NAME], [
 
-                '/(micromessenger)\/([\w\.]+)/i'                                      // WeChat
-            ], [[self::NAME, 'WeChat'], self::VERSION], [
+                // WebView
+                '/;fbav\/([\w\.]+);/i'                                                // Facebook App for iOS & Android with version
+                ], [self::VERSION, [self::NAME, 'Facebook']], [
+                '/FBAN\/FBIOS|FB_IAB\/FB4A/i'                                         // Facebook App for iOS & Android without version
+                ], [[self::NAME, 'Facebook']], [
+                '/safari\s(line)\/([\w\.]+)/i',                                       // Line App for iOS
+                '/\b(line)\/([\w\.]+)\/iab/i',                                        // Line App for Android
+                '/(chromium|instagram)[\/\s]([\w\.-]+)/i'                             // Chromium/Instagram
+                ], [self::NAME, self::VERSION], [
+                '/\bgsa\/([\w\.]+)\s.*safari\//i'                                     // Google Search Appliance on iOS
+                ], [self::VERSION, [self::NAME, 'GSA']], [
 
-                '/(QQ)\/([\d\.]+)/i'                                                  // QQ, aka ShouQ
-            ], [self::NAME, self::VERSION], [
-
-                '/m?(qqbrowser)[\/\s]?([\w\.]+)/i'                                    // QQBrowser
-            ], [self::NAME, self::VERSION], [
-
-                '/xiaomi\/miuibrowser\/([\w\.]+)/i'                                   // MIUI Browser
-            ], [self::VERSION, [self::NAME, 'MIUI Browser']], [
-
-                '/;fbav\/([\w\.]+);/i'                                                // Facebook App for iOS & Android
-            ], [self::VERSION, [self::NAME, 'Facebook']], [
-
-                '/(headlesschrome) ([\w\.]+)/i'                                       // Chrome Headless
-            ], [self::VERSION, [self::NAME, 'Chrome Headless']], [
+                '/headlesschrome(?:\/([\w\.]+)|\s)/i'                                 // Chrome Headless
+                ], [self::VERSION, [self::NAME, 'Chrome Headless']], [
 
                 '/\swv\).+(chrome)\/([\w\.]+)/i'                                      // Chrome WebView
-            ], [[self::NAME, '/(.+)/', '$1 WebView'], self::VERSION], [
+                ], [[self::NAME, 'Chrome WebView'], self::VERSION], [
 
-                '/((?:oculus|samsung)browser)\/([\w\.]+)/i'
-            ], [[self::NAME, '/(.+(?:g|us))(.+)/', '$1 $2'], self::VERSION], [                // Oculus / Samsung Browser
+                '/droid.+\sversion\/([\w\.]+)\b.+(?:mobile\ssafari|safari)/i'         // Android Browser
+                ], [self::VERSION, [self::NAME, 'Android Browser']], [
 
-                '/android.+version\/([\w\.]+)\s+(?:mobile\s?safari|safari)*/i'        // Android Browser
-            ], [self::VERSION, [self::NAME, 'Android Browser']], [
+                '/(chrome|omniweb|arora|[tizenoka]{5}\s?browser)\/v?([\w\.]+)/i'      // Chrome/OmniWeb/Arora/Tizen/Nokia
+                ], [self::NAME, self::VERSION], [
 
-                '/(chrome|omniweb|arora|[tizenoka]{5}\s?browser)\/v?([\w\.]+)/i'
-                // Chrome/OmniWeb/Arora/Tizen/Nokia
-            ], [self::NAME, self::VERSION], [
-
-                '/(dolfin)\/([\w\.]+)/i'                                              // Dolphin
-            ], [[self::NAME, 'Dolphin'], self::VERSION], [
-
-                '/((?:android.+)crmo|crios)\/([\w\.]+)/i'                             // Chrome for Android iOS
-            ], [[self::NAME, 'Chrome'], self::VERSION], [
-
-                '/(coast)\/([\w\.]+)/i'                                               // Opera Coast
-            ], [[self::NAME, 'Opera Coast'], self::VERSION], [
-
-                '/fxios\/([\w\.-]+)/i'                                                // Firefox for iOS
-            ], [self::VERSION, [self::NAME, 'Firefox']], [
-
-                '/version\/([\w\.]+).+?mobile\/\w+\s(safari)/i'                       // Mobile Safari
-            ], [self::VERSION, [self::NAME, 'Mobile Safari']], [
-
-                '/version\/([\w\.]+).+?(mobile\s?safari|safari)/i'                    // Safari & Safari Mobile
-            ], [self::VERSION, self::NAME], [
-
+                '/version\/([\w\.]+)\s.*mobile\/\w+\s(safari)/i'                      // Mobile Safari
+                ], [self::VERSION, [self::NAME, 'Mobile Safari']], [
+                '/version\/([\w\.]+)\s.*(mobile\s?safari|safari)/i'                   // Safari & Safari Mobile
+                ], [self::VERSION, self::NAME], [
                 '/webkit.+?(mobile\s?safari|safari)(\/[\w\.]+)/i'                     // Safari < 3.0
-            ], [self::NAME, [self::VERSION, function ($str, $map) {
-                return $this->mapper->str($str, $map);
-            }, $this->maps['browser']['oldsafari']['version']]], [
+                ], [self::NAME, [self::VERSION, function ($str, $map) {return $this->mapper->str($str, $map);}, $this->maps['browser']['oldsafari']['version']]], [
 
-                '/(konqueror)\/([\w\.]+)/i',                                          // Konqueror
                 '/(webkit|khtml)\/([\w\.]+)/i'
-            ], [self::NAME, self::VERSION], [
+                ], [self::NAME, self::VERSION], [
 
                 // Gecko based
                 '/(navigator|netscape)\/([\w\.-]+)/i'                                 // Netscape
-            ], [[self::NAME, 'Netscape'], self::VERSION], [
+                ], [[self::NAME, 'Netscape'], self::VERSION], [
+                '/ile\svr;\srv:([\w\.]+)\).+firefox/i'                                // Firefox Reality
+                ], [self::VERSION, [self::NAME, 'Firefox Reality']], [
+                '/ekiohf.+(flow)\/([\w\.]+)/i',                                       // Flow
                 '/(swiftfox)/i',                                                      // Swiftfox
                 '/(icedragon|iceweasel|camino|chimera|fennec|maemo\sbrowser|minimo|conkeror)[\/\s]?([\w\.\+]+)/i',
-                // IceDragon/I'ceweasel/Camino/Chimera/Fennec/Maemo/Minimo/Conkeror
-                '/(firefox|seamonkey|k-meleon|icecat|iceape|firebird|phoenix)\/([\w\.-]+)/i',
-                // Firefox/SeaMonkey/K-Meleon/IceCat/I'ceApe/Firebird/Phoenix
-                '/(mozilla)\/([\w\.]+).+rv\:.+gecko\/\d+/i',                          // Mozilla
+                // IceDragon/Iceweasel/Camino/Chimera/Fennec/Maemo/Minimo/Conkeror
+                '/(firefox|seamonkey|k-meleon|icecat|iceape|firebird|phoenix|palemoon|basilisk|waterfox)\/([\w\.-]+)$/i',
+                // Firefox/SeaMonkey/K-Meleon/IceCat/IceApe/Firebird/Phoenix
+                '/(firefox)\/([\w\.]+)\s[\w\s\-]+\/[\w\.]+$/i',                       // Other Firefox-based
+                '/(mozilla)\/([\w\.]+)\s.+rv\:.+gecko\/\d+/i',                        // Mozilla
 
                 // Other
                 '/(polaris|lynx|dillo|icab|doris|amaya|w3m|netsurf|sleipnir)[\/\s]?([\w\.]+)/i',
-                // Polaris/Lynx/Dillo/iCab/Doris/Amaya/w3m/NetSurf/Sleipnir
+                                                                                        // Polaris/Lynx/Dillo/iCab/Doris/Amaya/w3m/NetSurf/Sleipnir
                 '/(links)\s\(([\w\.]+)/i',                                            // Links
-                '/(gobrowser)\/?([\w\.]+)*/i',                                        // GoBrowser
+                '/(gobrowser)\/?([\w\.]*)/i',                                         // GoBrowser
                 '/(ice\s?browser)\/v?([\w\._]+)/i',                                   // ICE Browser
                 '/(mosaic)[\/\s]([\w\.]+)/i'                                          // Mosaic
-            ], [self::NAME, self::VERSION]
-
-                /* /////////////////////
-                // Media players BEGIN
-                ////////////////////////
-                , [
-                '/(apple(?:coremedia|))\/((\d+)[\w\._]+)/i',                          // Generic Apple CoreMedia
-                '/(coremedia) v((\d+)[\w\._]+)/i'
-                ], [self::NAME, self::VERSION], [
-                '/(aqualung|lyssna|bsplayer)\/((\d+)?[\w\.-]+)/i'                     // Aqualung/Lyssna/BSPlayer
-                ], [self::NAME, self::VERSION], [
-                '/(ares|ossproxy)\s((\d+)[\w\.-]+)/i'                                 // Ares/OSSProxy
-                ], [self::NAME, self::VERSION], [
-                '/(audacious|audimusicstream|amarok|bass|core|dalvik|gnomemplayer|music on console|nsplayer|psp-internetradioplayer|videos)\/((\d+)[\w\.-]+)/i',
-                                                                                    // Audacious/AudiMusicStream/Amarok/BASS/OpenCORE/Dalvik/GnomeMplayer/MoC
-                                                                                    // NSPlayer/PSP-InternetRadioPlayer/Videos
-                '/(clementine|music player daemon)\s((\d+)[\w\.-]+)/i',               // Clementine/MPD
-                '/(lg player|nexplayer)\s((\d+)[\d\.]+)/i',
-                '/player\/(nexplayer|lg player)\s((\d+)[\w\.-]+)/i'                   // NexPlayer/LG Player
-                ], [self::NAME, self::VERSION], [
-                '/(nexplayer)\s((\d+)[\w\.-]+)/i'                                     // Nexplayer
-                ], [self::NAME, self::VERSION], [
-                '/(flrp)\/((\d+)[\w\.-]+)/i'                                          // Flip Player
-                ], [[self::NAME, 'Flip Player'], self::VERSION], [
-                '/(fstream|nativehost|queryseekspider|ia-archiver|facebookexternalhit)/i'
-                                                                                    '// FStream/NativeHost/QuerySeekSpider/I'A Archiver/facebookexternalhit
-                ], [self::NAME], [
-                '/(gstreamer) souphttpsrc (?:\([^\)]+\)){0,1} libsoup\/((\d+)[\w\.-]+)/i'
-                                                                                    // Gstreamer
-                ], [self::NAME, self::VERSION], [
-                '/(htc streaming player)\s[\w_]+\s\/\s((\d+)[\d\.]+)/i',              // HTC Streaming Player
-                '/(java|python-urllib|python-requests|wget|libcurl)\/((\d+)[\w\.-_]+)/i',
-                                                                                    // Java/urllib/requests/wget/cURL
-                '/(lavf)((\d+)[\d\.]+)/i'                                             // Lavf (FFMPEG)
-                ], [self::NAME, self::VERSION], [
-                '/(htc_one_s)\/((\d+)[\d\.]+)/i'                                      // HTC One S
-                ], [[self::NAME, /_/, ' '], self::VERSION], [
-                '/(mplayer)(?:\s|\/)(?:(?:sherpya-){0,1}svn)(?:-|\s)(r\d+(?:-\d+[\w\.-]+){0,1})/i'
-                                                                                    // MPlayer SVN
-                ], [self::NAME, self::VERSION], [
-                '/(mplayer)(?:\s|\/|[unkow-]+)((\d+)[\w\.-]+)/i'                      // MPlayer
-                ], [self::NAME, self::VERSION], [
-                '/(mplayer)/i',                                                       // MPlayer (no other info)
-                '/(yourmuze)/i',                                                      // YourMuze
-                '/(media player classic|nero showtime)/i'                             // Media Player Classic/Nero ShowTime
-                ], [self::NAME], [
-                '/(nero (?:home|scout))\/((\d+)[\w\.-]+)/i'                           // Nero Home/Nero Scout
-                ], [self::NAME, self::VERSION], [
-                '/(nokia\d+)\/((\d+)[\w\.-]+)/i'                                      // Nokia
-                ], [self::NAME, self::VERSION], [
-                '/\s(songbird)\/((\d+)[\w\.-]+)/i'                                    // Songbird/Philips-Songbird
-                ], [self::NAME, self::VERSION], [
-                '/(winamp)3 version ((\d+)[\w\.-]+)/i',                               // Winamp
-                '/(winamp)\s((\d+)[\w\.-]+)/i',
-                '/(winamp)mpeg\/((\d+)[\w\.-]+)/i'
-                ], [self::NAME, self::VERSION], [
-                '/(ocms-bot|tapinradio|tunein radio|unknown|winamp|inlight radio)/i'  // OCMS-bot/tap in radio/tunein/unknown/winamp (no other info)
-                                                                                    // inlight radio
-                ], [self::NAME], [
-                '/(quicktime|rma|radioapp|radioclientapplication|soundtap|totem|stagefright|streamium)\/((\d+)[\w\.-]+)/i'
-                                                                                    // QuickTime/RealMedia/RadioApp/RadioClientApplication/
-                                                                                    // SoundTap/Totem/Stagefright/Streamium
-                ], [self::NAME, self::VERSION], [
-                '/(smp)((\d+)[\d\.]+)/i'                                              // SMP
-                ], [self::NAME, self::VERSION], [
-                '/(vlc) media player - version ((\d+)[\w\.]+)/i',                     // VLC Videolan
-                '/(vlc)\/((\d+)[\w\.-]+)/i',
-                '/(xbmc|gvfs|xine|xmms|irapp)\/((\d+)[\w\.-]+)/i,                    // XBMC/gvfs/Xine/XMMS/i'rapp
-                '/(foobar2000)\/((\d+)[\d\.]+)/i',                                    // Foobar2000
-                '/(itunes)\/((\d+)[\d\.]+)/i'                                         // iTunes
-                ], [self::NAME, self::VERSION], [
-                '/(wmplayer)\/((\d+)[\w\.-]+)/i',                                     // Windows Media Player
-                '/(windows-media-player)\/((\d+)[\w\.-]+)/i'
-                ], [[self::NAME, /-/, ' '], self::VERSION], [
-                '/windows\/((\d+)[\w\.-]+) upnp\/[\d\.]+ dlnadoc\/[\d\.]+ (home media server)/i'
-                                                                                    // Windows Media Server
-                ], [self::VERSION, [self::NAME, 'Windows']], [
-                '/(com\.riseupradioalarm)\/((\d+)[\d\.]*)/i'                          // RiseUP Radio Alarm
-                ], [self::NAME, self::VERSION], [
-                '/(rad.io)\s((\d+)[\d\.]+)/i',                                        // Rad.io
-                '/(radio.(?:de|at|fr))\s((\d+)[\d\.]+)/i'
-                ], [[self::NAME, 'rad.io'], self::VERSION]
-                //////////////////////
-                // Media players END
-                ////////////////////*/
+                ], [self::NAME, self::VERSION]
 
             ],
 
-            'cpu' => [
-                [
+            'cpu' => [[
 
                 '/(?:(amd|x(?:(?:86|64)[-_])?|wow|win)64)[;\)]/i'                       // AMD64 (x64)
             ], [[self::ARCHITECTURE, 'amd64']], [
 
                 '/(ia32(?=;))/i'                                                        // IA32 (quicktime)
-            ], [[self::ARCHITECTURE, function ($str) {
-                return $this->util->lowerize($str);
-            }]], [
+            ], [[self::ARCHITECTURE, function ($str) {return $this->util->lowerize($str);}]], [
 
                 '/((?:i[346]|x)86)[;\)]/i'                                              // IA32 (x86)
             ], [[self::ARCHITECTURE, 'ia32']], [
@@ -381,9 +296,7 @@ class UAParser
 
                 '/((?:avr32|ia64(?=;))|68k(?=\))|\barm(?=v(?:[1-7]|[5-7]1)l?|;|eabi)|(?=atmel )avr|(?:irix|mips|sparc)(?:64)?\b|pa-risc)/i'
                                                                                         // IA64, 68K, ARM/64, AVR/32, IRIX/64, MIPS/64, SPARC/64, PA-RISC
-            ], [[self::ARCHITECTURE, function ($str) {
-                return $this->util->lowerize($str);
-            }]]
+            ], [[self::ARCHITECTURE, function ($str) {return $this->util->lowerize($str);}]]
             ],
 
             'device' => [
@@ -696,78 +609,71 @@ class UAParser
             ],
 
             'os' => [[
-
-                // Windows based
-                '/microsoft\s(windows)\s(vista|xp)/i'                                 // Windows (iTunes)
+                // Windows
+                '/microsoft\s(windows)\s(vista|xp)/i'
             ], [self::NAME, self::VERSION], [
-                '/(windows)\snt\s6\.2;\s(arm)/i',                                     // Windows RT
-                '/(windows\sphone(?:\sos)*)[\s\/]?([\d\.\s]+\w)*/i',                  // Windows Phone
-                '/(windows\smobile|windows)[\s\/]?([ntce\d\.\s]+\w)/i'
-            ], [self::NAME, [self::VERSION, function ($str, $map) {
-                return $this->mapper->str($str, $map);
-            }, $this->maps['os']['windows']['version']]], [
+                '/(windows)\snt\s6\.2;\s(arm)/i',
+                '/(windows\sphone(?:\sos)*)[\s\/]?([\d\.\s\w]*)/i',
+                '/(windows\smobile|windows)[\s\/]?([ntce\d\.\s]+\w)(?!.+xbox)/i'
+            ], [self::NAME, [self::VERSION, function ($str, $map) {return $this->mapper->str($str, $map);}, $this->maps['os']['windows']['version']]], [
                 '/(win(?=3|9|n)|win\s9x\s)([nt\d\.]+)/i'
-            ], [[self::NAME, 'Windows'], [self::VERSION, function ($str, $map) {
-                return $this->mapper->str($str, $map);
-            }, $this->maps['os']['windows']['version']]], [
+            ], [[self::NAME, 'Windows'], [self::VERSION, function ($str, $map) {return $this->mapper->str($str, $map);}, $this->maps['os']['windows']['version']]], [
 
-                // Mobile/Embedded OS
-                '/\((bb)(10);/i'                                                      // BlackBerry 10
-            ], [[self::NAME, 'BlackBerry'], self::VERSION], [
-                '/(blackberry)\w*\/?([\w\.]+)*/i',                                    // Blackberry
-                '/(tizen)[\/\s]([\w\.]+)/i',                                          // Tizen
-                '/(android|webos|palm\sos|qnx|bada|rim\stablet\sos|meego|contiki)[\/\s-]?([\w\.]+)*/i',
-                // Android/WebOS/Palm/QNX/Bada/RIM/MeeGo/Contiki
-                '/linux;.+(sailfish);/i'                                              // Sailfish OS
-            ], [self::NAME, self::VERSION], [
-                '/(symbian\s?os|symbos|s60(?=;))[\/\s-]?([\w\.]+)*/i'                 // Symbian
-            ], [[self::NAME, 'Symbian'], self::VERSION], [
-                '/\((series40);/i'                                                    // Series 40
-            ], [self::NAME], [
-                '/mozilla.+\(mobile;.+gecko.+firefox/i'                               // Firefox OS
-            ], [[self::NAME, 'Firefox OS'], self::VERSION], [
-
-                // Console
-                '/(nintendo|playstation)\s([wids34portablevu]+)/i',                   // Nintendo/Playstation
-
-                // GNU/Linux based
-                '/(mint)[\/\s\(]?(\w+)*/i',                                           // Mint
-                '/(mageia|vectorlinux)[;\s]/i',                                       // Mageia/VectorLinux
-                '/(joli|[kxln]?ubuntu|debian|[open]*suse|gentoo|(?=\s)arch|slackware|fedora|mandriva|centos|pclinuxos|redhat|zenwalk|linpus)[\/\s-]?(?!chrom)([\w\.-]+)*/i',
-                // Joli/Ubuntu/Debian/SUSE/Gentoo/Arch/Slackware
-                // Fedora/Mandriva/CentOS/PCLinuxOS/RedHat/Zenwalk/Linpus
-                '/(hurd|linux)\s?([\w\.]+)*/i',                                       // Hurd/Linux
-                '/(gnu)\s?([\w\.]+)*/i'                                               // GNU
-            ], [self::NAME, self::VERSION], [
-
-                '/(cros)\s[\w]+\s([\w\.]+\w)/i'                                       // Chromium OS
-            ], [[self::NAME, 'Chromium OS'], self::VERSION], [
-
-                // Solaris
-                '/(sunos)\s?([\w\.]+\d)*/i'                                           // Solaris
-            ], [[self::NAME, 'Solaris'], self::VERSION], [
-
-                // BSD based
-                '/\s([frentopc-]{0,4}bsd|dragonfly)\s?([\w\.]+)*/i'                   // FreeBSD/NetBSD/OpenBSD/PC-BSD/DragonFly
-            ], [self::NAME, self::VERSION], [
-
-                '/(haiku)\s(\w+)/i'                                                  // Haiku
-            ], [self::NAME, self::VERSION], [
-
-                '/cfnetwork\/.+darwin/i',
-                '/ip[honead]+(?:.*os\s([\w]+)*\slike\smac|;\sopera)/i'                // iOS
+                // iOS/macOS
+                '/ip[honead]{2,4}\b(?:.*os\s([\w]+)\slike\smac|;\sopera)/i',
+                '/cfnetwork\/.+darwin/i'
             ], [[self::VERSION, '/_/', '.'], [self::NAME, 'iOS']], [
-
-                '/(mac\sos\sx)\s?([\w\s\.]+\w)*/i',
-                '/(macintosh|mac(?=_powerpc)\s)/i'                                    // Mac OS
+                '/(mac\sos\sx)\s?([\w\s\.]*)/i',
+                '/(macintosh|mac(?=_powerpc)\s)(?!.+haiku)/i'
             ], [[self::NAME, 'Mac OS'], [self::VERSION, '/_/', '.']], [
 
+                // Mobile OSes
+                '/(android|webos|palm\sos|qnx|bada|rim\stablet\sos|meego|sailfish|contiki)[\/\s-]?([\w\.]*)/i',
+                '/(blackberry)\w*\/([\w\.]*)/i',
+                '/(tizen|kaios)[\/\s]([\w\.]+)/i',
+                '/\((series40);/i'
+            ], [self::NAME, self::VERSION], [
+                '/\(bb(10);/i'
+            ], [self::VERSION, [self::NAME, 'BlackBerry']], [
+                '/(?:symbian\s?os|symbos|s60(?=;)|series60)[\/\s-]?([\w\.]*)/i' // Symbian
+            ], [self::VERSION, [self::NAME, 'Symbian']], [
+                '/mozilla.+\(mobile;.+gecko.+firefox/i'
+            ], [[self::NAME, 'Firefox OS']], [
+                '/web0s;.+rt(tv)/i',
+                '/\b(?:hp)?wos(?:browser)?\/([\w\.]+)/i'
+            ], [self::VERSION, [self::NAME, 'webOS']], [
+
+                // Google Chromecast
+                '/crkey\/([\d\.]+)/i'                           // Google Chromecast
+            ], [self::VERSION, [self::NAME, 'Chromecast']], [
+                '/(cros)\s[\w]+\s([\w\.]+\w)/i'                 // Chromium OS
+            ], [[self::NAME, 'Chromium OS'], self::VERSION],[
+
+                // Console
+                '/(nintendo|playstation)\s([wids345portablevuch]+)/i',
+                '/(xbox);\s+xbox\s([^\);]+)/i',
+
+                // GNU/Linux based
+                '/(mint)[\/\s\(\)]?(\w*)/i',
+                '/(mageia|vectorlinux)[;\s]/i',
+                '/(joli|[kxln]?ubuntu|debian|suse|opensuse|gentoo|arch(?=\slinux)|slackware|fedora|mandriva|centos|pclinuxos|redhat|zenwalk|linpus|raspbian)(?:\sgnu\/linux)?(?:\slinux)?[\/\s-]?(?!chrom|package)([\w\.-]*)/i',
+                                                                // Joli/Ubuntu/Debian/SUSE/Gentoo/Arch/Slackware
+                                                                // Fedora/Mandriva/CentOS/PCLinuxOS/RedHat/Zenwalk/Linpus
+                '/(hurd|linux)\s?([\w\.]*)/i',
+                '/(gnu)\s?([\w\.]*)/i',
+
+                // BSD based
+                '/\s([frentopc-]{0,4}bsd|dragonfly)\s?(?!amd|[ix346]{1,2}86)([\w\.]*)/i',
+                '/(haiku)\s(\w+)/i'
+            ], [self::NAME, self::VERSION], [
+
                 // Other
-                '/((?:open)?solaris)[\/\s-]?([\w\.]+)*/i',                            // Solaris
-                '/(aix)\s((\d)(?=\.|\)|\s)[\w\.]*)*/i',                               // AIX
-                '/(plan\s9|minix|beos|os\/2|amigaos|morphos|risc\sos|openvms)/i',
-                // Plan9/Minix/BeOS/OS2/AmigaOS/MorphOS/RISCOS/OpenVMS
-                '/(unix)\s?([\w\.]+)*/i'                                              // UNIX
+                '/(sunos)\s?([\w\.\d]*)/i'
+            ], [[self::NAME, 'Solaris'], self::VERSION], [
+                '/((?:open)?solaris)[\/\s-]?([\w\.]*)/i',
+                '/(aix)\s((\d)(?=\.|\)|\s)[\w\.])*/i',
+                '/(plan\s9|minix|beos|os\/2|amigaos|morphos|risc\sos|openvms|fuchsia)/i',
+                '/(unix)\s?([\w\.]*)/i'
             ], [self::NAME, self::VERSION]
             ]
         ];
